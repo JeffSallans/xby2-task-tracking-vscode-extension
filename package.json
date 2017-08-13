@@ -41,6 +41,8 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2"
+    "cheerio": "^1.0.0-rc.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1"
   }
 }

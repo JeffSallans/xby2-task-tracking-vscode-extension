@@ -4,8 +4,62 @@
  */
 const httpntlm = require('httpntlm');
 const cheerio = require('cheerio');
+const moment = require('moment');
+const _ = require('lodash');
 
 const baseUrl = `https://xby2apps.xby2.com/TaskManagement/`;
+
+/**
+ * The structure of a task
+ */
+const defaultTask = {
+    // Required properties
+    activityId: null,
+    clientId: null,
+    projectId: null,
+    isBillable: true,
+    date: new Date(),
+    hours: '',
+    minutes: '', // must be 0, 15, 30, or 45
+
+    // Optional properties
+    description: '',
+};
+
+/**
+ * Parse the activity id from strings like 'edit(event,9999)'
+ * @see http://regexr.com/3gi0j
+ */
+let activityIdRegex = /edit\(event,(\d*)\)/g
+
+/**
+ * Returns the activity ids of the tasks on the given date
+ *
+ * @param {String} htmlAsString The HTML returned for the specific task
+ * @param {Moment.Date} targetDate The given date as a moment object
+ * @returns {Array.of.int} 
+ */
+const parseOutActivityIdGivenDate = (htmlAsString, targetDate) => {
+    const $ = cheerio.load(htmlAsString);
+    const taskElementList = $(`td[onclick="popup(${targetDate.year}, ${targetDate.month}, ${targetDate.day})"] p`) || [];
+    return _.map(taskElementList, (taskElement) => {
+        const taskOnClickText = taskElement.attr('onClick');
+        // Reset regex counter
+        activityIdRegex.lastIndex = 0;
+        const activityIdRegexMatch = taskOnClickText.match(/edit\(event,(\d*)\)/g) || [];
+        const activityId = activityIdRegexMatch[1];
+        return activityId;
+    });
+};
+
+/**
+ * Returns an object with the same structure as defaultTask for the given html
+ * @param {String} htmlAsString The HTML returned for the specific task
+ * @returns {Object} 
+ */
+const parseOutActivityDetails = (htmlAsString) => {
+
+};
 
 /**
  * Returns a promise that resolves to True if the username and password are valid
@@ -27,7 +81,7 @@ const baseUrl = `https://xby2apps.xby2.com/TaskManagement/`;
  * @returns {Promise.resolves.bool}
  */
 const isLoginValid = (username, password) => {
-    var userDataReadyPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         var url = baseUrl;
         httpntlm.get({
             url: baseUrl,
@@ -47,18 +101,68 @@ const isLoginValid = (username, password) => {
             resolve(isValid);
         });
     });
-    return userDataReadyPromise;
 };
 
-const getDailyHours = (username, password) => {
+const getDailyTasks = (username, password, date) => {
+    // Get all tasks for this month
+    return new Promise((resolve, reject) => {
+        var url = baseUrl;
+        httpntlm.get({
+            url,
+            username: username,
+            password: password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            if(error || response.statusCode >= 400) {
+                reject(error);
+                return;
+            }
+
+            resolve(response.body);
+        });
+    })
+    // Parse the html for the activity id for the given date
+    .then((html) => {
+        const dateOrDefault = _.defaultTo(moment(date), moment());
+        return parseOutActivityIdGivenDate(html, dateOrDefault);
+    })
+    // Retrieve all the html for the given activity id
+    .then((activityIdList) => {
+        const url = `${baseUrl}/Activities/Edit?ActivityID=${activityId}&redirection=true`;
+        return new Promise((resolve, reject) => {
+            httpntlm.get({
+                url,
+                username: username,
+                password: password,
+                workstation: 'choose.something',
+                domain: ''
+            }, function (error, response) {
+                console.log(`${url} returned statusCode: ${response.statusCode}`);
+                
+                if(error || response.statusCode >= 400) {
+                    reject(error);
+                    return;
+                }
+                resolve(response.body);
+            });
+        });
+    })
+    // Parse the html for the activity information
+    .then((html) => {
+        return parseOutActivityDetails(html);
+    });
+};
+
+const getWeeklyTasks = (username, password, date) => {
+    const dateOrDefault = _.defaultTo(moment(date), moment());
 
 };
 
-const getWeeklyHours = (username, password) => {
-
-};
-
-const getMonthlyHours = (username, password) => {
+const getMonthlyTasks = (username, password, date) => {
+    const dateOrDefault = _.defaultTo(moment(date), moment());
 
 };
 
@@ -66,15 +170,20 @@ const getClients = (username, password) => {
 
 };
 
-const submitHours = (username, password) => {
+const submitTask = (username, password, task) => {
+
+};
+
+const deleteTask = (username, password, taskId) => {
 
 };
 
 module.exports = {
     isLoginValid,
-    getDailyHours,
-    getWeeklyHours,
-    getMonthlyHours,
+    getDailyTasks,
+    getWeeklyTasks,
+    getMonthlyTasks,
     getClients,
-    submitHours,
+    submitTask,
+    deleteTask,
 };
