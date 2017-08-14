@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Task Tracking Service parseOutActivityIdListGivenDate to work for mock html 1`] = `
+Array [
+  "229268",
+]
+`;

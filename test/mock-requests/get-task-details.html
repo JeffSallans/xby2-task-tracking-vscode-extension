@@ -1,0 +1,182 @@
+
+
+
+<script src="/TaskManagement/bundles/jqueryui?v=_HkUDeRnMykD_gLVMwJnfia3CVk-91zORRpsha9riZ01"></script>
+
+<link href="/TaskManagement/Content/themes/base/css?v=ps9Ga9601PrzNA2SK3sQXlYmNW3igUv5FOdOPWptyus1" rel="stylesheet"/>
+
+
+
+
+<div class="loading"></div>
+<div class="local">
+<form action="/TaskManagement/Activities/Edit?ActivityID=229268&amp;redirection=true" method="post">    <table style="align-content:center">
+        <tr>
+            <td class="no-border"><label for="clientLabel">Client</label></td>
+            <td class="no-border" colspan="5"><select id="client" name="client"><option value="27">X by 2</option>
+<option selected="selected" value="48">Auto-Owners Insurance</option>
+</select></td>
+        </tr>
+        <tr>
+            <td class="no-border"><label for="projectLable">Project</label></td>
+            <td class="no-border" colspan ="5"><select id="project" name="project"><option value="529">Life WebEZ 2.0</option>
+<option selected="selected" value="552">UW&#160;Modernization</option>
+</select></td>
+        </tr>
+        <tr style="border-bottom: solid 1px">
+            <td class="no-border"><label for="taskLabel">Task</label></td>
+            <td class="no-border"><select id="task" name="task"><option selected="selected" value="4435">Implementation</option>
+</select></td>
+            <td class="no-border" colspan="3"><button type="button"onclick="createTask(229268)">Create Task</button></td>
+        </tr>
+        <tr>
+            <td class="no-border"><label for="dateLabel">Date</label></td>
+            <td class="no-border" colspan ="5"><input id="date" name="date" type="text" value="8/2/2017" /></td>
+        </tr>
+        <tr>
+            <td class="no-border" colspan="6"><label class="block">Description</label>
+                <div id="wysihtml5-toolbar" style="display: none;">
+                    <a data-wysihtml5-command="bold"><i class="fa fa-bold"></i></a>
+                    <a data-wysihtml5-command="italic"><i class="fa fa-italic"></i></a>                        
+                    <a data-wysihtml5-command="insertUnorderedList"><i class="fa fa-list-ul"></i></a>
+                    <a data-wysihtml5-command="insertOrderedList"><i class="fa fa-list-ol"></i></a>
+                </div>
+                <textarea cols="20" id="activityDescription" name="activityDescription" rows="2">
+Hardware issue, need to replace laptop&lt;br&gt;Technical QA documentation&lt;br&gt;React performance Prototype</textarea></td>
+        </tr>
+        <tr>
+            <td class="no-border"><label for="hourLabel">Hours</label></td>
+            <!--<td class="no-border"><select id="hrs" name="hrs"><option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option selected="selected" value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+</select></td>-->
+            <td class="no-border"><input class="inputWidth" type="number" min="0" max="24" name="hrs" value="8"/></td>
+        </tr>
+        <tr>
+            <td class="no-border"><label for="minLabel">Minutes</label></td>
+            <!--<td class="no-border"><select id="min" name="min"><option selected="selected" value="0">0</option>
+<option value="15">15</option>
+<option value="30">30</option>
+<option value="45">45</option>
+</select></td>-->
+            <td class="no-border"><input class="inputWidth" type="number" min="0" max="45" step="15" name="min" value="0"/></td>
+        </tr>
+        <tr>
+            <td class="no-border"><label for="billLabel">Billable</label></td>
+            <td class="no-border"><input checked="checked" data-val="true" data-val-required="The billable field is required." id="billable" name="billable" type="checkbox" value="true" /><input name="billable" type="hidden" value="false" /></td>
+        </tr>
+    </table>
+<input data-val="true" data-val-number="The field ActivityID must be a number." data-val-required="The ActivityID field is required." id="activityID" name="activityID" type="hidden" value="229268" />    <input type="submit" value="Submit" onclick="$('.loading').show();">
+</form>    <div class="create" id="create" title="Create a Task"></div>
+    <p class="error"></p>
+</div>
+<script>
+    $('#date').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/dd/yy',
+        gotoCurrent: true
+    });
+        $('#client').change(function () {
+            var selectedClient = $(this).val();
+            $.getJSON('/TaskManagement/Activities/Projects', { clientId: selectedClient }, function (projects) {
+                var projectSelect = $('#project');
+                projectSelect.empty();
+                $.each(projects, function (index, project) {
+                    projectSelect.append($('<option/>').attr('value', project.Id).text(project.Name));
+                });
+                projectSelect.ready(changeTasks);
+            });
+           });
+
+        $('#project').change(function () {
+            var selectedProject = $(this).val();
+            $.getJSON('/TaskManagement/Activities/Tasks', { projectId: selectedProject }, function (tasks) {
+            var taskSelect = $('#task');
+            taskSelect.empty();
+            $.each(tasks, function (index, task) {
+                taskSelect.append($('<option/>').attr('value', task.Id).text(task.Name));
+            });
+            });
+        });
+
+            function changeTasks() {
+                var selectedProject = $('#project').val();
+                $.getJSON('/TaskManagement/Activities/Tasks', { projectId: selectedProject }, function (tasks) {
+                    var taskSelect = $('#task');
+                    taskSelect.empty();
+                    $.each(tasks, function (index, task) {
+                        taskSelect.append($('<option/>').attr('value', task.Id).text(task.Name));
+                    });
+                });
+            }
+
+    var newTaskName;
+    function createTask(activityID) {
+        widthVal = screen.width * .50;
+        heightVal = screen.height * .60;
+        heightVal = heightVal > 500 ? 500 : heightVal;
+        $("#create").dialog({
+            autoOpen: false,
+            modal: true,
+            width: widthVal,
+            height: heightVal,
+            closeOnEscape: true,
+            open: function (event, ui) {
+                $(this).load('Activities/CreateTask?projectId=' + $("#project").val() + '&clientId=' + $("#client").val());
+                $('.ui-widget-overlay').bind('click', function () {
+                    $('#create').dialog('close');
+                    $('#create').empty();
+                });
+                $("#editdialog").dialog("close");
+                return false;
+            },
+            close: function (event, ui) {
+                if ($("#create").data('task') !== undefined) { //a new task was created
+                    $("#editdialog").dialog("option", "open", function (event, ui) {
+                        var url = encodeURI('Activities/Edit?ActivityID=' + activityID + '&redirection=true&selectedClient=' + $("#clientname").text() + '&selectedProject=' + $("#projectname").text() + '&newTaskName=' + $("#create").data('task'));
+                        $(this).load(url);
+                        $('.ui-widget-overlay').bind('click', function () {
+                            $('#editdialog').dialog('close');
+                            $('#editdialog').empty();
+                        })
+                        return false;
+                    })
+                }
+                $("#editdialog").dialog("open");
+            },
+        })
+        $("#create").dialog("open");
+    }
+
+    $(function () {
+        var editor = new wysihtml5.Editor("activityDescription", {
+            // id of textarea element
+            toolbar: "wysihtml5-toolbar", // id of toolbar element
+            parserRules: wysihtml5ParserRules // defined in parser rules set 
+        });
+    });
+</script>
+

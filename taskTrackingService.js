@@ -30,7 +30,7 @@ const defaultTask = {
  * Parse the activity id from strings like 'edit(event,9999)'
  * @see http://regexr.com/3gi0j
  */
-let activityIdRegex = /edit\(event,(\d*)\)/g
+let activityIdRegex = /edit\(event,(\d*?)\)/g
 
 /**
  * Returns the activity ids of the tasks on the given date
@@ -39,14 +39,14 @@ let activityIdRegex = /edit\(event,(\d*)\)/g
  * @param {Moment.Date} targetDate The given date as a moment object
  * @returns {Array.of.int} 
  */
-const parseOutActivityIdGivenDate = (htmlAsString, targetDate) => {
+const parseOutActivityIdListGivenDate = (htmlAsString, targetDate) => {
     const $ = cheerio.load(htmlAsString);
-    const taskElementList = $(`td[onclick="popup(${targetDate.year}, ${targetDate.month}, ${targetDate.day})"] p`) || [];
+    const taskElementList = $(`td[onclick="popup(${targetDate.year()}, ${targetDate.month()+1}, ${targetDate.day()-1})"] p`) || [];
     return _.map(taskElementList, (taskElement) => {
-        const taskOnClickText = taskElement.attr('onClick');
+        const taskOnClickText = taskElement.attribs.onclick;
         // Reset regex counter
         activityIdRegex.lastIndex = 0;
-        const activityIdRegexMatch = taskOnClickText.match(/edit\(event,(\d*)\)/g) || [];
+        const activityIdRegexMatch = activityIdRegex.exec(taskOnClickText) || [];
         const activityId = activityIdRegexMatch[1];
         return activityId;
     });
@@ -127,7 +127,7 @@ const getDailyTasks = (username, password, date) => {
     // Parse the html for the activity id for the given date
     .then((html) => {
         const dateOrDefault = _.defaultTo(moment(date), moment());
-        return parseOutActivityIdGivenDate(html, dateOrDefault);
+        return parseOutActivityIdListGivenDate(html, dateOrDefault);
     })
     // Retrieve all the html for the given activity id
     .then((activityIdList) => {
@@ -186,4 +186,6 @@ module.exports = {
     getClients,
     submitTask,
     deleteTask,
+    parseOutActivityIdListGivenDate,
+    parseOutActivityDetails,
 };
