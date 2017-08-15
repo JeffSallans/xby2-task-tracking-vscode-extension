@@ -57,8 +57,20 @@ const parseOutActivityIdListGivenDate = (htmlAsString, targetDate) => {
  * @param {String} htmlAsString The HTML returned for the specific task
  * @returns {Object} 
  */
-const parseOutActivityDetails = (htmlAsString) => {
-
+const parseOutActivityDetails = (htmlAsString, activityId) => {
+    const $ = cheerio.load(htmlAsString);
+    const task = {
+        activityId,
+        clientId: Number($('#client option[selected="selected"]')[0].attribs.value),
+        projectId: Number($('#project option[selected="selected"]')[0].attribs.value),
+        taskId: Number($('#task option[selected="selected"]')[0].attribs.value),
+        date: moment($('#date')[0].attribs.value),
+        description: $('#activityDescription')[0].children[0].data,
+        hours: Number($('[name="hrs"]')[0].attribs.value),
+        minutes: Number($('[name="min"]')[0].attribs.value),
+        isBillable: Boolean($('[name="billable"]')[0].attribs.value),
+    };
+    return Object.assign({}, defaultTask, task);
 };
 
 /**

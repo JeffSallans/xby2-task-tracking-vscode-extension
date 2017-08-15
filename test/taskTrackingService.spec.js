@@ -24,8 +24,8 @@ describe("Task Tracking Service", function() {
         expect(activityIds).toMatchSnapshot();
     });
 
-    xit("parseOutActivityDetails to work for mock html", function() {
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
+    it("parseOutActivityDetails to work for mock html", function() {
+        const task = taskTrackingService.parseOutActivityDetails(getTaskDetails, 229268);
+        expect(task).toMatchSnapshot();
     });
 });

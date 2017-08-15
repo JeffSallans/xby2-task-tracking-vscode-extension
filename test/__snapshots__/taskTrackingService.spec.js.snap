@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Task Tracking Service parseOutActivityDetails to work for mock html 1`] = `
+Object {
+  "activityId": 229268,
+  "clientId": 48,
+  "date": "2017-08-02T04:00:00.000Z",
+  "description": "Hardware issue, need to replace laptop<br>Technical QA documentation<br>React performance Prototype",
+  "hours": 8,
+  "isBillable": true,
+  "minutes": 0,
+  "projectId": 552,
+  "taskId": 4435,
+}
+`;
+
 exports[`Task Tracking Service parseOutActivityIdListGivenDate to work for mock html 1`] = `
 Array [
   "229268",
