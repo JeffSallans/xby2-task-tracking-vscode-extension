@@ -4,13 +4,16 @@ exports[`Task Tracking Service parseOutActivityDetails to work for mock html 1`]
 Object {
   "activityId": 229268,
   "clientId": 48,
+  "clientName": "Auto-Owners Insurance",
   "date": "2017-08-02T04:00:00.000Z",
   "description": "Hardware issue, need to replace laptop<br>Technical QA documentation<br>React performance Prototype",
   "hours": 8,
   "isBillable": true,
   "minutes": 0,
   "projectId": 552,
+  "projectName": "UW Modernization",
   "taskId": 4435,
+  "taskName": "Implementation",
 }
 `;
 

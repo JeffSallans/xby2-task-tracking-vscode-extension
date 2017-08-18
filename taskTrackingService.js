@@ -16,7 +16,11 @@ const defaultTask = {
     // Required properties
     activityId: null,
     clientId: null,
+    clientName: 'Client',
     projectId: null,
+    projectName: 'Project',
+    taskId: null,
+    taskName: 'Task',
     isBillable: true,
     date: new Date(),
     hours: '',
@@ -62,8 +66,11 @@ const parseOutActivityDetails = (htmlAsString, activityId) => {
     const task = {
         activityId,
         clientId: Number($('#client option[selected="selected"]')[0].attribs.value),
+        clientName: $('#client option[selected="selected"]').text(),
         projectId: Number($('#project option[selected="selected"]')[0].attribs.value),
+        projectName: $('#project option[selected="selected"]').text(),        
         taskId: Number($('#task option[selected="selected"]')[0].attribs.value),
+        taskName: $('#task option[selected="selected"]').text(),                
         date: moment($('#date')[0].attribs.value),
         description: $('#activityDescription')[0].children[0].data,
         hours: Number($('[name="hrs"]')[0].attribs.value),
