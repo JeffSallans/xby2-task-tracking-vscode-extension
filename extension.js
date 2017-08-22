@@ -24,6 +24,52 @@ var userData = defaultUserData;
  */
 var loginAndHoursBar = null;
 
+const loginWorkflow = () => {
+    // The code you place here will be executed every time your command is executed
+
+    // Prompt user for X by 2 auth info
+    return vscode.window.showInputBox({
+        prompt: 'Username',
+    })
+    .then((value) => {
+        userData.username = value;
+    })
+    .then(() => {
+        return vscode.window.showInputBox({
+            prompt: 'password (don\'t worry this is only stored in local memory, never on disk)',
+            password: true,
+        });
+    })
+    .then((value) => {
+        userData.password = value;
+    })
+    // Check if the username and password are valid
+    .then(() => {
+        if (_.isNil(userData.username) || _.isNil(userData.password)) return false;
+        return taskTrackingService.isLoginValid(userData.username, userData.password)
+    })
+    .then((isValid) => {
+        userData.isValid = isValid;
+        if (!userData.isValid) {
+            vscode.window.showErrorMessage('Invalid username and password combination.  Try again by re-running the command.');
+        }
+        loginAndHoursBar.update(userData, []);
+    });
+};
+
+const submitTaskWorkflow = () => {
+    let promise = Promise.resolve();
+    // if not logged in, do that first
+    if (_.isNil(userData.username) || _.isNil(userData.password)) {
+        promise.then(() => loginWorkflow());
+    }
+
+    promise.then(() => {
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Hello Jeff!');
+    });
+};
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -37,48 +83,12 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var loginDisposable = vscode.commands.registerCommand('extension.login', function () {
-        // The code you place here will be executed every time your command is executed
-
-        // Prompt user for X by 2 auth info
-        vscode.window.showInputBox({
-            prompt: 'Username',
-        })
-        .then((value) => {
-            userData.username = value;
-        })
-        .then(() => {
-            return vscode.window.showInputBox({
-                prompt: 'password (don\'t worry this is only stored in local memory, never on disk)',
-                password: true,
-            });
-        })
-        .then((value) => {
-            userData.password = value;
-        })
-        // Check if the username and password are valid
-        .then(() => {
-            if (_.isNil(userData.username) || _.isNil(userData.password)) return false;
-            return taskTrackingService.isLoginValid(userData.username, userData.password)
-        })
-        .then((isValid) => {
-            userData.isValid = isValid;
-            if (!userData.isValid) {
-                vscode.window.showErrorMessage('Invalid username and password combination.  Try again by re-running the command.');
-            }
-            loginAndHoursBar.update(userData, []);
-        });
-    });
+    var loginDisposable = vscode.commands.registerCommand('extension.login', loginWorkflow);
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var submitTaskDisposable = vscode.commands.registerCommand('extension.submitTask', function () {
-        // The code you place here will be executed every time your command is executed
-
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello Jeff!');
-    });
+    var submitTaskDisposable = vscode.commands.registerCommand('extension.submitTask', submitTaskWorkflow);
 
 
     context.subscriptions.push(loginDisposable);
