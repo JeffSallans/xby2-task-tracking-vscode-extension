@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const taskTrackingService = require('./taskTrackingService');
+const LoginAndHoursBar = require('./LoginAndHoursBar');
 
 /**
  * Holds the default X by 2 auth information
@@ -17,6 +18,11 @@ let defaultUserData = {
  */
 var userData = defaultUserData;
 
+/**
+ * View to display information
+ */
+var loginAndHoursBar = null;
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -24,6 +30,8 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "xby2-task-tracking" is now active!');
+
+    loginAndHoursBar = new LoginAndHoursBar();
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -56,13 +64,14 @@ function activate(context) {
             if (!userData.isValid) {
                 vscode.window.showErrorMessage('Invalid username and password combination.  Try again by re-running the command.');
             }
+            loginAndHoursBar.update(userData, []);
         });
     });
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var submitHoursDisposable = vscode.commands.registerCommand('extension.submitHours', function () {
+    var submitTaskDisposable = vscode.commands.registerCommand('extension.submitTask', function () {
         // The code you place here will be executed every time your command is executed
 
         // Display a message box to the user
@@ -71,13 +80,14 @@ function activate(context) {
 
 
     context.subscriptions.push(loginDisposable);
-    context.subscriptions.push(submitHoursDisposable);
+    context.subscriptions.push(submitTaskDisposable);
 }
 exports.activate = activate;
 
 // this method is called when your extension is deactivated
 function deactivate() {
     userData = defaultUserData;
+    loginAndHoursBar.dispose();
     console.log('Your extension "xby2-task-tracking" has deactivated.  User data is cleared from memory.');
 }
 exports.deactivate = deactivate;

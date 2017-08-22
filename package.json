@@ -11,19 +11,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.sayHello",
-    "onCommand:extension.login"
+    "*"
   ],
   "main": "./extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.sayHello",
-        "title": "Hello World"
-      },
-      {
         "command": "extension.login",
         "title": "X by 2 - login"
+      },
+      {
+        "command": "extension.submitTask",
+        "title": "X by 2 - submit task"
       }
     ]
   },

@@ -16,7 +16,7 @@ const getTasksMonthView = fs.readFileSync('./test/mock-requests/get-tasks-month-
 const getTaskDetails = fs.readFileSync('./test/mock-requests/get-task-details.html').toString();
 
 // Defines a Mocha test suite to group tests of similar kind together
-describe("Task Tracking Service", function() {
+describe("Task Tracking Parsing HTML Service", function() {
 
     // Defines a Mocha unit test
     it("parseOutActivityIdListGivenDate to work for mock html", function() {
