@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const _ = require('lodash');
 const taskTrackingService = require('./taskTrackingService');
 const LoginAndHoursBar = require('./LoginAndHoursBar');
 
@@ -57,6 +58,7 @@ function activate(context) {
         })
         // Check if the username and password are valid
         .then(() => {
+            if (_.isNil(userData.username) || _.isNil(userData.password)) return false;
             return taskTrackingService.isLoginValid(userData.username, userData.password)
         })
         .then((isValid) => {
