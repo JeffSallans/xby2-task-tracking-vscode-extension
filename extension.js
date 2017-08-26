@@ -93,7 +93,7 @@ const submitTaskWorkflow = () => {
         });
     })
     .then((value) => {
-        const client = _.find(clientList, client => client.Name === value);
+        const client = _.find(clientList, client => client.Name === value) || {};
         taskData.clientId = client.Id;
         return taskTrackingService.getProjects(userData.username, userData.password, taskData.clientId);
     })
@@ -105,7 +105,7 @@ const submitTaskWorkflow = () => {
         });
     })
     .then((value) => {
-        const project = _.find(projectList, project => project.Name === value);
+        const project = _.find(projectList, project => project.Name === value) || {};
         taskData.projectId = project.Id;
         return taskTrackingService.getTasks(userData.username, userData.password, taskData.projectId);
     })
@@ -117,7 +117,7 @@ const submitTaskWorkflow = () => {
         });
     })
     .then((value) => {
-        const task = _.find(taskList, task => task.Name === value);
+        const task = _.find(taskList, task => task.Name === value) || {};
         taskData.taskId = task.Id;
     })
     .then(() => {

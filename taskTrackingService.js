@@ -222,12 +222,23 @@ const submitTask = (username, password, task) => {
             password,
             workstation: 'choose.something',
             domain: '',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded',
+            },
             body: `client=${task.clientId}&project=${task.projectId}&task=${task.taskId}&date=${task.date.month()+1}%2F${task.date.date()}%2F${task.date.year()}&activityDescription=${task.description}&_wysihtml5_mode=1&hrs=${task.hours}&min=${task.minutes}&billable=${task.isBillable}`,
         }, function (error, response) {
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
-            const saveFailed = error || response.statusCode >= 400;            
-            resolve(!saveFailed);
+            const successBody = `<html><head><title>Object moved</title></head><body>
+            <h2>Object moved to <a href="/TaskManagement/">here</a>.</h2>
+            </body></html>`;
+
+            const saveSucceeded = !error &&
+                response.statusCode === 302 &&
+                // Check if the response matches if all the whitespace is gone
+                response.body.replace(/\s/g, '') === successBody.replace(/\s/g, '');            
+
+            resolve(saveSucceeded);
         });
     });  
 };
