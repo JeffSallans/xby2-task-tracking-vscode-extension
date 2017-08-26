@@ -4,7 +4,7 @@ const vscode = require('vscode');
 const _ = require('lodash');
 const taskTrackingService = require('./taskTrackingService');
 const LoginAndHoursBar = require('./LoginAndHoursBar');
-
+const defaultTask = require('./defaultTask');
 /**
  * Holds the default X by 2 auth information
  */
@@ -25,6 +25,8 @@ let defaultUserData = {
  * Holds the X by 2 auth information
  */
 var userData = defaultUserData;
+
+var taskData = defaultTask;
 
 /**
  * View to display information
@@ -68,15 +70,80 @@ const loginWorkflow = () => {
 };
 
 const submitTaskWorkflow = () => {
+    var clientList = [];
+    var projectList = [];
+    var taskList = [];
+    
     let promise = Promise.resolve();
     // if not logged in, do that first
     if (_.isNil(userData.username) || _.isNil(userData.password)) {
         promise.then(() => loginWorkflow());
     }
 
-    promise.then(() => {
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello Jeff!');
+    return promise.then(() => {
+        // Initialize task data
+        taskData = defaultTask;
+        return taskTrackingService.getClients();
+    })
+    .then((clients) => {
+        clientList = clients;
+        const clientNames = _.map(clientList, client => client.Name);
+        return vscode.window.showQuickPick(clientNames, {
+            prompt: 'Select Client',
+        });
+    })
+    .then((value) => {
+        const client = _.find(clientList, client => client.Name === value);
+        taskData.clientId = client.Id;
+        return taskTrackingService.getProjects(userData.username, userData.password, taskData.clientId);
+    })
+    .then((projects) => {
+        projectList = projects;
+        const projectNames = _.map(projectList, project => project.Name);
+        return vscode.window.showQuickPick(projectNames, {
+            prompt: 'Select Project',
+        });
+    })
+    .then((value) => {
+        const project = _.find(projectList, project => project.Name === value);
+        taskData.projectId = project.Id;
+        return taskTrackingService.getTasks(userData.username, userData.password, taskData.projectId);
+    })
+    .then((tasks) => {
+        taskList = tasks;
+        const taskNames = _.map(taskList, task => task.Name);
+        return vscode.window.showQuickPick(taskNames, {
+            prompt: 'Select Task',
+        });
+    })
+    .then((value) => {
+        const task = _.find(taskList, task => task.Name === value);
+        taskData.taskId = task.Id;
+    })
+    .then(() => {
+        return vscode.window.showQuickPick(['billable', 'non-billable'], {
+            prompt: 'Is the task billable?',
+        });
+    })
+    .then((value) => {
+        taskData.isBillable = value === 'billable';
+    })
+    .then(() => {
+        return vscode.window.showInputBox({
+            prompt: 'Select Hours',
+        });
+    })
+    .then((value) => {
+        taskData.hours = Number(value);
+    })
+    .then(() => {
+        return vscode.window.showInputBox({
+            prompt: 'What did you do?',
+        });
+    })
+    .then((value) => {
+        taskData.description = value;
+        return taskTrackingService.submitTask(userData.username, userData.password, taskData);
     });
 };
 

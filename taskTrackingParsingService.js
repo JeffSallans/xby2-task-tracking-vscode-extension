@@ -57,7 +57,25 @@ const parseOutActivityDetails = (htmlAsString, activityId) => {
     return Object.assign({}, defaultTask, task);
 };
 
+/**
+ * Returns an object with the same structure as defaultTask for the given html
+ * @param {String} htmlAsString The HTML returned for the specific task
+ * @returns {Object} 
+ */
+const parseOutClientOptions = (htmlAsString) => {
+    const $ = cheerio.load(htmlAsString);
+    const clientElementList = $('#client option');
+    return _.map(clientElementList, (clientElement) => {
+        return {
+            Id: clientElement.attribs.value,
+            Name: clientElement.text(),
+            isDefault: Boolean(clientElement.attribs.selected),
+        };
+    }) || [];
+};
+
 module.exports = {
     parseOutActivityIdListGivenDate,
     parseOutActivityDetails,
+    parseOutClientOptions,
 };

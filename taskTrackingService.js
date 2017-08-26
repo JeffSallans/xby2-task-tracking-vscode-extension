@@ -130,7 +130,25 @@ const getMonthlyTasks = (username, password, date) => {
  */
 const getClients = (username, password, date) => {
     const dateOrDefault = _.defaultTo(moment(date), moment());    
-    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Create?year=${dateOrDefault.year()}&month=${dateOrDefault.month()}&day=${dateOrDefault.day()}&redirection=true`;
+    const url = `${baseUrl}/Activities/Create?year=${dateOrDefault.year()}&month=${dateOrDefault.month() + 1}&day=${dateOrDefault.date()}&redirection=true`;
+    return new Promise((resolve, reject) => {
+        httpntlm.get({
+            url,
+            username: username,
+            password: password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            if(error || response.statusCode >= 400) {
+                reject(error);
+                return;
+            }
+            const parsedClients = taskTrackingParsingService.parseOutClientOptions(response.body);
+            resolve(parsedClients);
+        });
+    });
 };
 
 /**
@@ -145,6 +163,23 @@ const getClients = (username, password, date) => {
  */
 const getProjects = (username, password, clientId) => {
     const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Projects?clientId=${clientId}`;    
+    return new Promise((resolve, reject) => {
+        httpntlm.get({
+            url,
+            username: username,
+            password: password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            if(error || response.statusCode >= 400) {
+                reject(error);
+                return;
+            }
+            resolve(response.body);
+        });
+    });
 };
 
 /**
@@ -159,7 +194,23 @@ const getProjects = (username, password, clientId) => {
  */
 const getTasks = (username, password, projectId) => {
     const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Tasks?projectId=${projectId}`
-    
+    return new Promise((resolve, reject) => {
+        httpntlm.get({
+            url,
+            username: username,
+            password: password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            if(error || response.statusCode >= 400) {
+                reject(error);
+                return;
+            }
+            resolve(response.body);
+        });
+    });   
 };
 
 const submitTask = (username, password, taskData) => {
@@ -176,6 +227,8 @@ module.exports = {
     getWeeklyTasks,
     getMonthlyTasks,
     getClients,
+    getProjects,
+    getTasks,
     submitTask,
     deleteTask,
 };
