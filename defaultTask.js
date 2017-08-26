@@ -1,3 +1,4 @@
+const moment = require('moment');
 
 /**
  * The structure of a task
@@ -12,9 +13,9 @@ const defaultTask = {
     taskId: null,
     taskName: 'Task',
     isBillable: true,
-    date: new Date(),
-    hours: '',
-    minutes: '', // must be 0, 15, 30, or 45
+    date: moment(),
+    hours: 0,
+    minutes: 0, // must be 0, 15, 30, or 45
 
     // Optional properties
     description: '',

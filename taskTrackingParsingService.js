@@ -67,8 +67,8 @@ const parseOutClientOptions = (htmlAsString) => {
     const clientElementList = $('#client option');
     return _.map(clientElementList, (clientElement) => {
         return {
-            Id: clientElement.attribs.value,
-            Name: clientElement.text(),
+            Id: Number(clientElement.attribs.value),
+            Name: _.get(clientElement, 'children[0].data'),
             isDefault: Boolean(clientElement.attribs.selected),
         };
     }) || [];

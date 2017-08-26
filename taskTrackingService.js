@@ -7,7 +7,7 @@ const moment = require('moment');
 const _ = require('lodash');
 const taskTrackingParsingService = require('./taskTrackingParsingService');
 
-const baseUrl = `https://xby2apps.xby2.com/TaskManagement/`;
+const baseUrl = `https://xby2apps.xby2.com/TaskManagement`;
 
 /**
  * Returns a promise that resolves to True if the username and password are valid
@@ -33,8 +33,8 @@ const isLoginValid = (username, password) => {
         var url = baseUrl;
         httpntlm.get({
             url: baseUrl,
-            username: username,
-            password: password,
+            username,
+            password,
             workstation: 'choose.something',
             domain: ''
         }, function (error, response){
@@ -64,8 +64,8 @@ const getDailyTasks = (username, password, date) => {
         var url = baseUrl;
         httpntlm.get({
             url,
-            username: username,
-            password: password,
+            username,
+            password,
             workstation: 'choose.something',
             domain: ''
         }, function (error, response) {
@@ -75,7 +75,6 @@ const getDailyTasks = (username, password, date) => {
                 reject(error);
                 return;
             }
-
             resolve(response.body);
         });
     })
@@ -91,8 +90,8 @@ const getDailyTasks = (username, password, date) => {
                 const url = `${baseUrl}/Activities/Edit?ActivityID=${activityId}&redirection=true`;
                 httpntlm.get({
                     url,
-                    username: username,
-                    password: password,
+                    username,
+                    password,
                     workstation: 'choose.something',
                     domain: ''
                 }, function (error, response) {
@@ -134,8 +133,8 @@ const getClients = (username, password, date) => {
     return new Promise((resolve, reject) => {
         httpntlm.get({
             url,
-            username: username,
-            password: password,
+            username,
+            password,
             workstation: 'choose.something',
             domain: ''
         }, function (error, response) {
@@ -162,12 +161,12 @@ const getClients = (username, password, date) => {
  *  @prop {string} Name Description for the given id
  */
 const getProjects = (username, password, clientId) => {
-    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Projects?clientId=${clientId}`;    
+    const url = `${baseUrl}/Activities/Projects?clientId=${clientId}`;    
     return new Promise((resolve, reject) => {
         httpntlm.get({
             url,
-            username: username,
-            password: password,
+            username,
+            password,
             workstation: 'choose.something',
             domain: ''
         }, function (error, response) {
@@ -177,7 +176,7 @@ const getProjects = (username, password, clientId) => {
                 reject(error);
                 return;
             }
-            resolve(response.body);
+            resolve(JSON.parse(response.body));
         });
     });
 };
@@ -193,12 +192,12 @@ const getProjects = (username, password, clientId) => {
  *  @prop {string} Name Description for the given id
  */
 const getTasks = (username, password, projectId) => {
-    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Tasks?projectId=${projectId}`
+    const url = `${baseUrl}/Activities/Tasks?projectId=${projectId}`
     return new Promise((resolve, reject) => {
         httpntlm.get({
             url,
-            username: username,
-            password: password,
+            username,
+            password,
             workstation: 'choose.something',
             domain: ''
         }, function (error, response) {
@@ -208,17 +207,47 @@ const getTasks = (username, password, projectId) => {
                 reject(error);
                 return;
             }
-            resolve(response.body);
+            resolve(JSON.parse(response.body));
         });
     });   
 };
 
-const submitTask = (username, password, taskData) => {
-
+const submitTask = (username, password, task) => {
+    //POST
+    const url = `${baseUrl}/Activities/Create?year=${task.date.year()}&month=${task.date.month()+1}&day=${task.date.date()}&redirection=true`;
+    return new Promise((resolve, reject) => {
+        httpntlm.post({
+            url,
+            username,
+            password,
+            workstation: 'choose.something',
+            domain: '',
+            body: `client=${task.clientId}&project=${task.projectId}&task=${task.taskId}&date=${task.date.month()+1}%2F${task.date.date()}%2F${task.date.year()}&activityDescription=${task.description}&_wysihtml5_mode=1&hrs=${task.hours}&min=${task.minutes}&billable=${task.isBillable}`,
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            const saveFailed = error || response.statusCode >= 400;            
+            resolve(!saveFailed);
+        });
+    });  
 };
 
-const deleteTask = (username, password, taskId) => {
-
+const deleteTask = (username, password, task) => {
+    const url = `${baseUrl}/Activities/DeleteActivity?activityID=${task.activityId}&year=${task.date.year()}&month=${task.date.month()+1}&day=${task.date.date()}`;
+    return new Promise((resolve, reject) => {
+        httpntlm.get({
+            url,
+            username,
+            password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response) {
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            const deleteFailed = error || response.statusCode >= 400;
+            resolve(!deleteFailed);
+        });
+    });  
 };
 
 module.exports = {

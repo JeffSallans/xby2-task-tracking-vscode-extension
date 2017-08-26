@@ -83,7 +83,7 @@ const submitTaskWorkflow = () => {
     return promise.then(() => {
         // Initialize task data
         taskData = defaultTask;
-        return taskTrackingService.getClients();
+        return taskTrackingService.getClients(userData.username, userData.password);
     })
     .then((clients) => {
         clientList = clients;
@@ -144,6 +144,14 @@ const submitTaskWorkflow = () => {
     .then((value) => {
         taskData.description = value;
         return taskTrackingService.submitTask(userData.username, userData.password, taskData);
+    })
+    .then((saveSucceeded) => {
+        if (saveSucceeded) {
+            vscode.window.showInformationMessage('Task was created');
+        }
+        else {
+            vscode.window.showErrorMessage('Task was not created, please try again');
+        }
     });
 };
 
