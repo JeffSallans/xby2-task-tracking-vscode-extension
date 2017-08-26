@@ -51,6 +51,13 @@ const isLoginValid = (username, password) => {
     });
 };
 
+/**
+ * Gets all the tasks (including details) for the given date
+ * @param {string} username
+ * @param {string} password
+ * @param {string} date The date of the task in string form '05-13-2017'
+ * @returns {Array.of.objects} Returns an array of tasks with the same structure as defaultTask
+ */
 const getDailyTasks = (username, password, date) => {
     // Get all tasks for this month
     return new Promise((resolve, reject) => {
@@ -114,15 +121,44 @@ const getMonthlyTasks = (username, password, date) => {
     throw "Not Implemented Yet";
 };
 
-const getClients = (username, password) => {
-
+/**
+ * Gets the available clients for the given user
+ *
+ * @param {string} username
+ * @param {string} password
+ * @param {string} date The date of the task in string form '05-13-2017'
+ */
+const getClients = (username, password, date) => {
+    const dateOrDefault = _.defaultTo(moment(date), moment());    
+    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Create?year=${dateOrDefault.year()}&month=${dateOrDefault.month()}&day=${dateOrDefault.day()}&redirection=true`;
 };
 
-const getProjects = (username, password) => {
-    
+/**
+ * Gets the available projects for the given client
+ *
+ * @param {string} username 
+ * @param {string} password 
+ * @param {int} clientId Identifier for the given client
+ * @returns {Array.of.objects}
+ *  @prop {int} Id Unique identifier for the task
+ *  @prop {string} Name Description for the given id
+ */
+const getProjects = (username, password, clientId) => {
+    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Projects?clientId=${clientId}`;    
 };
 
-const getTasks = (username, password) => {
+/**
+ * Gets the available tasks for the given project
+ *
+ * @param {string} username 
+ * @param {string} password 
+ * @param {int} projectId Identifier for the given project
+ * @returns {Array.of.objects}
+ *  @prop {int} Id Unique identifier for the task
+ *  @prop {string} Name Description for the given id
+ */
+const getTasks = (username, password, projectId) => {
+    const url = `https://xby2apps.xby2.com/TaskManagement/Activities/Tasks?projectId=${projectId}`
     
 };
 

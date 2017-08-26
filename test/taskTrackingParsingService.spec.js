@@ -11,7 +11,7 @@ const moment = require('moment');
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
-const taskTrackingService = require('../taskTrackingService');
+const taskTrackingService = require('../taskTrackingParsingService');
 const getTasksMonthView = fs.readFileSync('./test/mock-requests/get-tasks-month-view.html').toString();
 const getTaskDetails = fs.readFileSync('./test/mock-requests/get-task-details.html').toString();
 

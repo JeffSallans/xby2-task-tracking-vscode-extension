@@ -24,6 +24,13 @@ class LoginAndHoursBar {
      */
     update(userData, weeklyTasks) {
 
+        if (userData.loginIsPending) {
+            this._statusBarItem.text = `${this._statusBarTitle}: Logging in, please wait...`;
+            this._statusBarItem.command = '';
+            this._statusBarItem.show();  
+            return;
+        }
+        
         if (!userData.isValid) {
             this._statusBarItem.text = `${this._statusBarTitle}: Invalid Login, Click To Try Again`;
             this._statusBarItem.command = 'extension.login';

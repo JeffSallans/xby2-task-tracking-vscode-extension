@@ -11,7 +11,14 @@ const LoginAndHoursBar = require('./LoginAndHoursBar');
 let defaultUserData = {
     username: null,
     password: null,
+    /**
+     * True if the username and password have connected to the server
+     */
     isValid: false,
+    /**
+     * True if the program is waiting for the response for the login call
+     */
+    loginIsPending: false,
 };
 
 /**
@@ -46,9 +53,12 @@ const loginWorkflow = () => {
     // Check if the username and password are valid
     .then(() => {
         if (_.isNil(userData.username) || _.isNil(userData.password)) return false;
+        userData.loginIsPending = true;
+        loginAndHoursBar.update(userData, []);        
         return taskTrackingService.isLoginValid(userData.username, userData.password)
     })
     .then((isValid) => {
+        userData.loginIsPending = false;
         userData.isValid = isValid;
         if (!userData.isValid) {
             vscode.window.showErrorMessage('Invalid username and password combination.  Try again by re-running the command.');
