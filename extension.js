@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const _ = require('lodash');
+const moment = require('moment');
 const taskTrackingService = require('./taskTrackingService');
 const LoginAndHoursBar = require('./LoginAndHoursBar');
 const defaultTask = require('./defaultTask');
@@ -72,7 +73,9 @@ const loginWorkflow = () => {
 const submitTaskWorkflow = () => {
     var clientList = [];
     var projectList = [];
-    var taskList = [];
+    var taskTypeList = [];
+    var taskDateList = [];
+    const daysOfTheWeek = [1, 2, 3, 4, 5, 6, 7];
     
     let promise = Promise.resolve();
     // if not logged in, do that first
@@ -81,8 +84,23 @@ const submitTaskWorkflow = () => {
     }
 
     return promise.then(() => {
+        taskDateList = _.map(daysOfTheWeek, (dayOfTheWeek) => {
+            const date = moment().day(dayOfTheWeek);
+            return `${moment(date).format('M/D dddd')} - 0/0h`;
+        })
+
+        return vscode.window.showQuickPick(taskDateList, {
+            prompt: 'Select Date',
+        });
+    }).then((value) => {
+        const selectedDate = _.find(taskDateList, date => 
+            value.indexOf(moment(date).format('dddd')) !== -1
+        ) || moment();
+
         // Initialize task data
         taskData = defaultTask;
+        taskData.date = selectedDate;
+
         return taskTrackingService.getClients(userData.username, userData.password);
     })
     .then((clients) => {
@@ -110,14 +128,14 @@ const submitTaskWorkflow = () => {
         return taskTrackingService.getTasks(userData.username, userData.password, taskData.projectId);
     })
     .then((tasks) => {
-        taskList = tasks;
-        const taskNames = _.map(taskList, task => task.Name);
+        taskTypeList = tasks;
+        const taskNames = _.map(taskTypeList, task => task.Name);
         return vscode.window.showQuickPick(taskNames, {
             prompt: 'Select Task',
         });
     })
     .then((value) => {
-        const task = _.find(taskList, task => task.Name === value) || {};
+        const task = _.find(taskTypeList, task => task.Name === value) || {};
         taskData.taskId = task.Id;
     })
     .then(() => {
@@ -130,11 +148,17 @@ const submitTaskWorkflow = () => {
     })
     .then(() => {
         return vscode.window.showInputBox({
-            prompt: 'Select Hours',
+            prompt: 'Select Hours (accepts decimals .25, .5, .75)',
         });
     })
     .then((value) => {
-        taskData.hours = Number(value);
+        const duration = moment.duration(Number(value) * 60, 'minutes');        
+        taskData.hours = Number(duration.hours());
+        taskData.minutes = Number(duration.minutes());
+
+        if ([].some(taskData.minutes ) {
+            throw '';
+        }
     })
     .then(() => {
         return vscode.window.showInputBox({
