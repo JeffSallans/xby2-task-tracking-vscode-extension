@@ -70,12 +70,12 @@ const loginWorkflow = () => {
     });
 };
 
-const submitTaskWorkflow = () => {
+const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     var clientList = [];
     var projectList = [];
     var taskTypeList = [];
     var taskDateList = [];
-    const daysOfTheWeek = [1, 2, 3, 4, 5, 6, 7];
+    const daysOfTheWeek = [-6, -5, -4, -3, -2];
     
     let promise = Promise.resolve();
     // if not logged in, do that first
@@ -98,7 +98,7 @@ const submitTaskWorkflow = () => {
         ) || moment();
 
         // Initialize task data
-        taskData = defaultTask;
+        taskData = givenTaskData;
         taskData.date = selectedDate;
 
         return taskTrackingService.getClients(userData.username, userData.password);
@@ -106,6 +106,7 @@ const submitTaskWorkflow = () => {
     .then((clients) => {
         clientList = clients;
         const clientNames = _.map(clientList, client => client.Name);
+        if (_.has(taskData, 'clientId')) return taskData.clientId;
         return vscode.window.showQuickPick(clientNames, {
             prompt: 'Select Client',
         });
@@ -118,6 +119,7 @@ const submitTaskWorkflow = () => {
     .then((projects) => {
         projectList = projects;
         const projectNames = _.map(projectList, project => project.Name);
+        if (_.has(taskData, 'projectId')) return taskData.projectId;        
         return vscode.window.showQuickPick(projectNames, {
             prompt: 'Select Project',
         });
@@ -154,11 +156,15 @@ const submitTaskWorkflow = () => {
     .then((value) => {
         const duration = moment.duration(Number(value) * 60, 'minutes');        
         taskData.hours = Number(duration.hours());
-        taskData.minutes = Number(duration.minutes());
+        const pendingMinutes = Number(duration.minutes());
 
-        if ([].some(taskData.minutes ) {
-            throw '';
+        if (taskData.minutes % 15 !== 0) {
+            const errorMessage = 'Can only track tasks with the grainularity of 15 minute increments';
+            vscode.window.showErrorMessage(errorMessage);
+            return submitTaskWorkflow(taskData);            
         }
+
+        taskData.minutes = pendingMinutes;
     })
     .then(() => {
         return vscode.window.showInputBox({
