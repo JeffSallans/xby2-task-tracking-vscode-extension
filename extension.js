@@ -75,7 +75,13 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     var projectList = [];
     var taskTypeList = [];
     var taskDateList = [];
-    const daysOfTheWeek = [-6, -5, -4, -3, -2];
+    const daysOfTheWeekList = [
+        moment().day(-6), // last Monday
+        moment().day(-5), // last Tuesday
+        moment().day(-4), // last Wednesday
+        moment().day(-3), // last Thursday
+        moment().day(-2) // last Friday
+    ];
     
     let promise = Promise.resolve();
     // if not logged in, do that first
@@ -84,17 +90,16 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     }
 
     return promise.then(() => {
-        taskDateList = _.map(daysOfTheWeek, (dayOfTheWeek) => {
-            const date = moment().day(dayOfTheWeek);
-            return `${moment(date).format('M/D dddd')} - 0/0h`;
+        taskDateList = _.map(daysOfTheWeekList, (dayOfTheWeek) => {
+            return `${moment(dayOfTheWeek).format('M/D dddd')} - 0/0h`;
         })
 
         return vscode.window.showQuickPick(taskDateList, {
             prompt: 'Select Date',
         });
     }).then((value) => {
-        const selectedDate = _.find(taskDateList, date => 
-            value.indexOf(moment(date).format('dddd')) !== -1
+        const selectedDate = _.find(daysOfTheWeekList, dayOfTheWeek => 
+            value.indexOf(moment(dayOfTheWeek).format('dddd')) !== -1
         ) || moment();
 
         // Initialize task data
@@ -106,7 +111,7 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     .then((clients) => {
         clientList = clients;
         const clientNames = _.map(clientList, client => client.Name);
-        if (_.has(taskData, 'clientId')) return taskData.clientId;
+        if (!_.isNil(taskData, 'clientId')) return taskData.clientId;
         return vscode.window.showQuickPick(clientNames, {
             prompt: 'Select Client',
         });
@@ -119,7 +124,7 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     .then((projects) => {
         projectList = projects;
         const projectNames = _.map(projectList, project => project.Name);
-        if (_.has(taskData, 'projectId')) return taskData.projectId;        
+        if (!_.isNil(taskData, 'projectId')) return taskData.projectId;        
         return vscode.window.showQuickPick(projectNames, {
             prompt: 'Select Project',
         });
@@ -177,7 +182,9 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     })
     .then((saveSucceeded) => {
         if (saveSucceeded) {
-            vscode.window.showInformationMessage('Task was created');
+            const leanTaskDate = taskData.date.format('M/D');
+            const billableText = (taskData.isBillable) ? 'billable' : 'non-billable';
+            vscode.window.showInformationMessage(`${leanTaskDate} task was created with ${taskData.hours}:${taskData.minutes} ${billableText} hours`);
         }
         else {
             vscode.window.showErrorMessage('Task was not created, please try again');
