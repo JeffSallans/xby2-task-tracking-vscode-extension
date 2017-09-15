@@ -28,4 +28,9 @@ describe("Task Tracking Parsing HTML Service", function() {
         const task = taskTrackingService.parseOutActivityDetails(getTaskDetails, 229268);
         expect(task).toMatchSnapshot();
     });
+
+    it("parseOutTasksOfTheWeek to work for mock html", function() {
+        const tasks = taskTrackingService.parseOutTasksOfTheWeek(getTasksMonthView, moment('08-02-2017', 'MM-DD-YYYY'));
+        expect(tasks).toMatchSnapshot();
+    });
 });
