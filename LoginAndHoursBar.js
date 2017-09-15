@@ -39,8 +39,14 @@ class LoginAndHoursBar {
         }
 
         const loginMessage = `${userData.username}`;
-        const billableHours = 0;
-        const nonBillableHours = 0;
+        const billableTasks = _.filter(weeklyTasks, task => task.isBillable);
+        const billableHours = _.reduce(billableTasks, (hoursSoFar, task) => {
+            return hoursSoFar + task.hours + (task.minutes / 60.0);
+        }, 0);
+        const nonBillableTasks = _.filter(weeklyTasks, task => !task.isBillable);
+        const nonBillableHours = _.reduce(nonBillableTasks, (hoursSoFar, task) => {
+            return hoursSoFar + task.hours + (task.minutes / 60.0);
+        }, 0);
 
         this._statusBarItem.text = `${this._statusBarTitle}: ${loginMessage} ${billableHours}/${nonBillableHours}h`;
         this._statusBarItem.command = 'extension.submitTask';

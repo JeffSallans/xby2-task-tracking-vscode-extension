@@ -30,6 +30,11 @@ var userData = defaultUserData;
 var taskData = defaultTask;
 
 /**
+ * The
+ */
+var lastUpdatedWeeklyTasks = [];
+
+/**
  * View to display information
  */
 var loginAndHoursBar = null;
@@ -65,8 +70,13 @@ const loginWorkflow = () => {
         userData.isValid = isValid;
         if (!userData.isValid) {
             vscode.window.showErrorMessage('Invalid username and password combination.  Try again by re-running the command.');
+            return [];
         }
-        loginAndHoursBar.update(userData, []);
+        return taskTrackingService.getWeeklyTasks(userData.username, userData.password);
+    })
+    .then((weeklyTasks) => {
+        lastUpdatedWeeklyTasks = weeklyTasks;
+        loginAndHoursBar.update(userData, weeklyTasks);
     });
 };
 
@@ -76,11 +86,11 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     var taskTypeList = [];
     var taskDateList = [];
     const daysOfTheWeekList = [
-        moment().day(-6), // last Monday
-        moment().day(-5), // last Tuesday
-        moment().day(-4), // last Wednesday
-        moment().day(-3), // last Thursday
-        moment().day(-2) // last Friday
+        moment().day(1), // Monday
+        moment().day(2), // Tuesday
+        moment().day(3), // Wednesday
+        moment().day(4), // Thursday
+        moment().day(5) // Friday
     ];
     
     let promise = Promise.resolve();
@@ -91,7 +101,15 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
 
     return promise.then(() => {
         taskDateList = _.map(daysOfTheWeekList, (dayOfTheWeek) => {
-            return `${moment(dayOfTheWeek).format('M/D dddd')} - 0/0h`;
+            const billableTasks = _.filter(lastUpdatedWeeklyTasks, task => task.isBillable && task.date.format('MM-DD-YYYY') === dayOfTheWeek.format('MM-DD-YYYY')) || [];
+            const billableHours = _.reduce(billableTasks, (hoursSoFar, task) => {
+                return hoursSoFar + task.hours + (task.minutes / 60.0);
+            }, 0);
+            const nonBillableTasks = _.filter(lastUpdatedWeeklyTasks, task => !task.isBillable && task.date.format('MM-DD-YYYY') === dayOfTheWeek.format('MM-DD-YYYY')) || [];
+            const nonBillableHours = _.reduce(nonBillableTasks, (hoursSoFar, task) => {
+                return hoursSoFar + task.hours + (task.minutes / 60.0);
+            }, 0);
+            return `${moment(dayOfTheWeek).format('M/D dddd')} - ${billableHours}/${nonBillableHours}h`;
         })
 
         if (givenTaskData !== defaultTask) return `${givenTaskData.date.format('M/D dddd')} - 0/0h`;
@@ -191,6 +209,10 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
             const leanTaskDate = taskData.date.format('M/D');
             const billableText = (taskData.isBillable) ? 'billable' : 'non-billable';
             vscode.window.showInformationMessage(`${leanTaskDate} task was created with ${taskData.hours}:${taskData.minutes} ${billableText} hours`);
+            return taskTrackingService.getWeeklyTasks(userData.username, userData.password)
+            .then((weeklyTasks) => {
+                loginAndHoursBar.update(userData, weeklyTasks);
+            });
         }
         else {
             vscode.window.showErrorMessage('Task was not created, please try again');
