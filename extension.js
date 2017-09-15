@@ -94,24 +94,26 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
             return `${moment(dayOfTheWeek).format('M/D dddd')} - 0/0h`;
         })
 
+        if (givenTaskData !== defaultTask) return `${givenTaskData.date.format('M/D dddd')} - 0/0h`;
         return vscode.window.showQuickPick(taskDateList, {
             prompt: 'Select Date',
         });
     }).then((value) => {
+        const valueOrDefault = _.defaultTo(value, '');
         const selectedDate = _.find(daysOfTheWeekList, dayOfTheWeek => 
-            value.indexOf(moment(dayOfTheWeek).format('dddd')) !== -1
+            valueOrDefault.indexOf(moment(dayOfTheWeek).format('dddd')) !== -1
         ) || moment();
 
         // Initialize task data
-        taskData = givenTaskData;
+        taskData = Object.assign({}, givenTaskData);
         taskData.date = selectedDate;
 
-        return taskTrackingService.getClients(userData.username, userData.password);
+        return taskTrackingService.getClients(userData.username, userData.password, taskData.date);
     })
     .then((clients) => {
         clientList = clients;
         const clientNames = _.map(clientList, client => client.Name);
-        if (!_.isNil(taskData, 'clientId')) return taskData.clientId;
+        if (givenTaskData !== defaultTask) return taskData.clientName;
         return vscode.window.showQuickPick(clientNames, {
             prompt: 'Select Client',
         });
@@ -119,12 +121,13 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     .then((value) => {
         const client = _.find(clientList, client => client.Name === value) || {};
         taskData.clientId = client.Id;
+        taskData.clientName = client.Name;
         return taskTrackingService.getProjects(userData.username, userData.password, taskData.clientId);
     })
     .then((projects) => {
         projectList = projects;
         const projectNames = _.map(projectList, project => project.Name);
-        if (!_.isNil(taskData, 'projectId')) return taskData.projectId;        
+        if (givenTaskData !== defaultTask) return taskData.projectName;        
         return vscode.window.showQuickPick(projectNames, {
             prompt: 'Select Project',
         });
@@ -132,11 +135,13 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     .then((value) => {
         const project = _.find(projectList, project => project.Name === value) || {};
         taskData.projectId = project.Id;
+        taskData.projectName = project.Name;        
         return taskTrackingService.getTasks(userData.username, userData.password, taskData.projectId);
     })
     .then((tasks) => {
         taskTypeList = tasks;
         const taskNames = _.map(taskTypeList, task => task.Name);
+        if (givenTaskData !== defaultTask) return taskData.taskName;                
         return vscode.window.showQuickPick(taskNames, {
             prompt: 'Select Task',
         });
@@ -144,8 +149,10 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
     .then((value) => {
         const task = _.find(taskTypeList, task => task.Name === value) || {};
         taskData.taskId = task.Id;
+        taskData.taskName = task.Name;        
     })
     .then(() => {
+        if (givenTaskData !== defaultTask) return taskData.isBillable;                        
         return vscode.window.showQuickPick(['billable', 'non-billable'], {
             prompt: 'Is the task billable?',
         });
@@ -163,10 +170,9 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
         taskData.hours = Number(duration.hours());
         const pendingMinutes = Number(duration.minutes());
 
-        if (taskData.minutes % 15 !== 0) {
+        if (pendingMinutes % 15 !== 0) {
             const errorMessage = 'Can only track tasks with the grainularity of 15 minute increments';
-            vscode.window.showErrorMessage(errorMessage);
-            return submitTaskWorkflow(taskData);            
+            throw errorMessage;
         }
 
         taskData.minutes = pendingMinutes;
@@ -189,6 +195,12 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
         else {
             vscode.window.showErrorMessage('Task was not created, please try again');
         }
+    })
+    .catch((errorMessage) => {
+        return vscode.window.showErrorMessage(errorMessage)
+        .then(() => {
+            return submitTaskWorkflow(taskData);                            
+        })
     });
 };
 
