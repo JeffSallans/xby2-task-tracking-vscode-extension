@@ -98,7 +98,47 @@ const parseOutTasksOfTheWeek = (htmlAsString, targetDate) => {
     ];
 
     return _.transform(thisWeek, (resultSoFar, dayOfTheWeek) => {
-        const taskListElements = $(`td[onclick="popup(${dayOfTheWeek.format('YYYY, M, D')})"] p`) || [];
+        const taskListElements = $(`td[onclick="popup(${dayOfTheWeek.format('YYYY, M, D')})"] p[class^="found"]`) || [];
+        const taskList = _.map(taskListElements, (task) => {
+            // Reset regex counter
+            getClientAndHoursRegex.lastIndex = 0;
+            const taskDescription = _.get(task, 'children[0].data') || '';
+            const getClientAndHoursRegexMatch = getClientAndHoursRegex.exec(taskDescription) || [];
+            const clientName = getClientAndHoursRegexMatch[1];
+            const hours = Number(getClientAndHoursRegexMatch[2]) || 0;
+            const fractionalHours = Number(getClientAndHoursRegexMatch[3]) || 0;        
+            return Object.assign({}, defaultTask, {
+                date: dayOfTheWeek,
+                clientName,
+                hours,
+                minutes: fractionalHours * 60,
+                isBillable: task.attribs.class === "foundBillableTime",
+            });
+        });
+        taskList.forEach((task) => {
+            resultSoFar.push(task);
+        });
+    }, []);
+};
+
+/**
+ * Returns the list of tasks for the month for the given date
+ *
+ * @param {String} htmlAsString The HTML returned for the specific task
+ * @param {Moment.Date} targetDate The given date as a moment object
+ * @returns {Array.Object} - Returns an array of object like defaultTask
+ */
+const parseOutTasksOfTheMonth = (htmlAsString, targetDate) => {
+    const $ = cheerio.load(htmlAsString);
+    const maxDaysInAMonth = 31;
+    let thisMonth = [];
+    for (let index = 1; index <= maxDaysInAMonth; index++) {
+        const date = moment(targetDate.format(`MM-${index}-YYYY`))
+        thisMonth.push(date);
+    }
+
+    return _.transform(thisMonth, (resultSoFar, dayOfTheWeek) => {
+        const taskListElements = $(`td[onclick="popup(${dayOfTheWeek.format('YYYY, M, D')})"] p[class^="found"]`) || [];
         const taskList = _.map(taskListElements, (task) => {
             // Reset regex counter
             getClientAndHoursRegex.lastIndex = 0;
@@ -126,4 +166,5 @@ module.exports = {
     parseOutActivityDetails,
     parseOutClientOptions,
     parseOutTasksOfTheWeek,
+    parseOutTasksOfTheMonth,
 };

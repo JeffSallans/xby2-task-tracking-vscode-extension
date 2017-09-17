@@ -30,7 +30,7 @@ var userData = defaultUserData;
 var taskData = defaultTask;
 
 /**
- * The
+ * The list of tasks for this week, that is updated after every event
  */
 var lastUpdatedWeeklyTasks = [];
 
@@ -211,6 +211,7 @@ const submitTaskWorkflow = (givenTaskData = defaultTask) => {
             vscode.window.showInformationMessage(`${leanTaskDate} task was created with ${taskData.hours}:${taskData.minutes} ${billableText} hours`);
             return taskTrackingService.getWeeklyTasks(userData.username, userData.password)
             .then((weeklyTasks) => {
+                lastUpdatedWeeklyTasks = weeklyTasks;
                 loginAndHoursBar.update(userData, weeklyTasks);
             });
         }

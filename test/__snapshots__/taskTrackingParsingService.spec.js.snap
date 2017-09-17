@@ -23,6 +23,67 @@ Array [
 ]
 `;
 
+exports[`Task Tracking Parsing HTML Service parseOutTasksOfTheMonth to work for mock html 1`] = `
+Array [
+  Object {
+    "activityId": null,
+    "clientId": null,
+    "clientName": "Auto-Owners Insurance",
+    "date": "2017-08-01T04:00:00.000Z",
+    "description": "",
+    "hours": 8,
+    "isBillable": true,
+    "minutes": 0,
+    "projectId": null,
+    "projectName": "",
+    "taskId": null,
+    "taskName": "",
+  },
+  Object {
+    "activityId": null,
+    "clientId": null,
+    "clientName": "Auto-Owners Insurance",
+    "date": "2017-08-02T04:00:00.000Z",
+    "description": "",
+    "hours": 8,
+    "isBillable": true,
+    "minutes": 0,
+    "projectId": null,
+    "projectName": "",
+    "taskId": null,
+    "taskName": "",
+  },
+  Object {
+    "activityId": null,
+    "clientId": null,
+    "clientName": "Auto-Owners Insurance",
+    "date": "2017-08-03T04:00:00.000Z",
+    "description": "",
+    "hours": 8,
+    "isBillable": true,
+    "minutes": 0,
+    "projectId": null,
+    "projectName": "",
+    "taskId": null,
+    "taskName": "",
+  },
+  Object {
+    "activityId": null,
+    "clientId": null,
+    "clientName": "Auto-Owners Insurance",
+    "date": "2017-08-04T04:00:00.000Z",
+    "description": "",
+    "hours": 4,
+    "isBillable": true,
+    "minutes": 0,
+    "projectId": null,
+    "projectName": "",
+    "taskId": null,
+    "taskName": "",
+  },
+]
+`;
+
 exports[`Task Tracking Parsing HTML Service parseOutTasksOfTheWeek to work for mock html 1`] = `
 Array [
   Object {
