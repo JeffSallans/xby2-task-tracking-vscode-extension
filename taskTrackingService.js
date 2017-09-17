@@ -59,15 +59,20 @@ const isLoginValid = (username, password) => {
  * @returns {Array.of.objects} Returns an array of tasks with the same structure as defaultTask
  */
 const getDailyTasks = (username, password, date) => {
+    const dateOrDefault = _.defaultTo(moment(date), moment());    
     // Get all tasks for this month
     return new Promise((resolve, reject) => {
         var url = baseUrl;
-        httpntlm.get({
+        httpntlm.post({
             url,
             username,
             password,
             workstation: 'choose.something',
-            domain: ''
+            domain: '',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded',
+            },
+            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response) {
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
@@ -80,7 +85,6 @@ const getDailyTasks = (username, password, date) => {
     })
     // Parse the html for the activity id for the given date
     .then((html) => {
-        const dateOrDefault = _.defaultTo(moment(date), moment());
         return taskTrackingParsingService.parseOutActivityIdListGivenDate(html, dateOrDefault);
     })
     // Retrieve all the html for the given activity id
@@ -93,7 +97,7 @@ const getDailyTasks = (username, password, date) => {
                     username,
                     password,
                     workstation: 'choose.something',
-                    domain: ''
+                    domain: '',
                 }, function (error, response) {
                     console.log(`${url} returned statusCode: ${response.statusCode}`);
                     
@@ -121,12 +125,16 @@ const getWeeklyTasks = (username, password, date) => {
     const dateOrDefault = _.defaultTo(moment(date), moment());
     return new Promise((resolve, reject) => {
         var url = baseUrl;
-        httpntlm.get({
+        httpntlm.post({
             url: baseUrl,
             username,
             password,
             workstation: 'choose.something',
-            domain: ''
+            domain: '',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded',
+            },
+            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response){
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
@@ -151,12 +159,16 @@ const getMonthlyTasks = (username, password, date) => {
     const dateOrDefault = _.defaultTo(moment(date), moment());
     return new Promise((resolve, reject) => {
         var url = baseUrl;
-        httpntlm.get({
+        httpntlm.post({
             url: baseUrl,
             username,
             password,
             workstation: 'choose.something',
-            domain: ''
+            domain: '',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded',
+            },
+            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response){
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
