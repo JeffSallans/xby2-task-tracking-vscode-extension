@@ -111,7 +111,7 @@ const getDailyTasks = (username, password, date) => {
 };
 
 /**
- * Gets all the tasks (including details) for the week for the given date
+ * Gets all the tasks for the week for the given date
  * @param {string} username
  * @param {string} password
  * @param {string} date The date of the task in string form '05-13-2017'
@@ -140,9 +140,34 @@ const getWeeklyTasks = (username, password, date) => {
     });
 };
 
+/**
+ * Gets all the tasks for the month for the given date
+ * @param {string} username
+ * @param {string} password
+ * @param {string} date The date of the task in string form '05-13-2017'
+ * @returns {Array.of.objects} Returns an array of tasks with the same structure as defaultTask
+ */
 const getMonthlyTasks = (username, password, date) => {
     const dateOrDefault = _.defaultTo(moment(date), moment());
-    throw "Not Implemented Yet";
+    return new Promise((resolve, reject) => {
+        var url = baseUrl;
+        httpntlm.get({
+            url: baseUrl,
+            username,
+            password,
+            workstation: 'choose.something',
+            domain: ''
+        }, function (error, response){
+            console.log(`${url} returned statusCode: ${response.statusCode}`);
+            
+            if(error || response.statusCode >= 400) {
+                reject(error);
+                return;
+            }
+            const parsedTask = taskTrackingParsingService.parseOutTasksOfTheMonth(response.body, dateOrDefault);
+            resolve(parsedTask);
+        });
+    });
 };
 
 /**
