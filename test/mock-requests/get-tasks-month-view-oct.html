@@ -1,0 +1,659 @@
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p class="site-title"><a href="/TaskManagement/">Task Tracking</a></p>
+            </div>
+            <div class="float-right">
+                <!--<section id="login">
+                        Hello, <span class="username">CORP\jsallans</span>!
+                    </section>-->
+                <nav>
+                    <ul id="menu">
+                        <li><a href="/TaskManagement/">Activities</a></li>
+                        <li><a href="/TaskManagement/Administration">Administration</a></li>
+                        <li><a href="/TaskManagement/Reports">Reports</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        
+<section class="featured">
+    <div class="content-wrapper">
+        <hgroup class="title">
+            <h1>Activities</h1>
+        </hgroup>
+    </div>
+    <!--<div>
+        <a href="/TaskManagement/Activities/Create">Create New Activity</a>
+    </div>-->
+</section>
+
+        <section class="content-wrapper main-content clear-fix">
+            
+
+
+<script src="/TaskManagement/bundles/jqueryui?v=_HkUDeRnMykD_gLVMwJnfia3CVk-91zORRpsha9riZ01"></script>
+
+<script src="/TaskManagement/bundles/wysihtml5?v=j18H6to8ldw2DPqOjRdbPjdl9-MRMLs4DPkSPbHXwnA1"></script>
+
+<link href="/TaskManagement/Content/themes/base/css?v=ps9Ga9601PrzNA2SK3sQXlYmNW3igUv5FOdOPWptyus1" rel="stylesheet">
+
+<link href="/TaskManagement/Content/Calendar/ActivitiesCalendar/css?v=vnVlyFSni2RkLGBTAaOQwUo1WeF8bkMdeetiP9LqB9Q1" rel="stylesheet">
+
+
+<header>
+
+</header>
+<input type="hidden" id="hidey" onchange="error()">
+<div class="dialog" id="dialog" title="Enter Time" style="background: rgb(239, 238, 239); font-size: 0.85em;">
+<div class="loading"></div>
+</div>
+<div class="dialog" id="editdialog" title="Edit Entered Time" style="background: rgb(239, 238, 239); font-size: 0.85em;">
+<div class="loading"></div>
+</div>
+<!--<body id="bod">-->
+<div id="bod">
+<div id="calendar">
+
+<link href="/TaskManagement/Content/Calendar/Calendar/css?v=YDibHA46Zt9E3sCie4SKxQJVitg1PS1FTBBvhfdck141" rel="stylesheet">
+
+
+<form action="/TaskManagement/" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#calendar" id="form0" method="post"><input type="hidden" id="dateString" name="dateString" value="10/5/2017 9:36:57 PM">
+<table>
+    <tbody><tr>
+        <td class="no-border"><input type="submit" name="submitbutton" value="  «  "></td>
+        <td class="no-border" style="text-align: center"><h1 style="cursor: default; text-align: center">October 2017</h1></td>
+        <td class="no-border" style="text-align: right"><input type="submit" name="submitbutton" value="  »  "></td>
+    </tr>
+</tbody></table>
+</form>
+<table class="calendar" id="calendar" style="table-layout:fixed;">
+<thead>
+    <tr>
+        <th class="calendar">Sunday</th>
+        <th class="calendar">Monday</th>
+        <th class="calendar">Tuesday</th>
+        <th class="calendar">Wednesday</th>
+        <th class="calendar">Thursday</th>
+        <th class="calendar">Friday</th>
+        <th class="calendar">Saturday</th>
+        <th style="width: 5%"></th>
+    </tr>
+</thead>
+
+    <tbody><tr>
+            <td class="calendar" onclick="popup(2017, 10, 1)">
+                1
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 2)">
+                2
+                
+                
+                
+                
+                
+                    <p class="foundBillableTime" title="Auto-Owners Insurance  UW&nbsp;Modernization Implementation Fixed end-to-end tests with performance changes; Start UX polishing for underwriting page" onclick="edit(event,231965)">Auto-Owners Insurance - 8 hrs<img class="trash" src="/TaskManagement/Images/trash.gif" onmouseover="changeImage(this,'/TaskManagement/Images/trash_selected.gif')" onmouseout="changeImage(this,'/TaskManagement/Images/trash.gif')" onclick="deleteActivity(231965, 2017, 10, 2, event)"></p>
+                
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 3)">
+                3
+                
+                
+                
+                
+                
+                    <p class="foundBillableTime" title="Auto-Owners Insurance  UW&nbsp;Modernization Implementation Lots of meetings and work on polishing UX for underwriting page" onclick="edit(event,231966)">Auto-Owners Insurance - 8.5 hrs<img class="trash" src="/TaskManagement/Images/trash.gif" onmouseover="changeImage(this,'/TaskManagement/Images/trash_selected.gif')" onmouseout="changeImage(this,'/TaskManagement/Images/trash.gif')" onclick="deleteActivity(231966, 2017, 10, 3, event)"></p>
+                
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 4)">
+                4
+                
+                
+                
+                
+                
+                    <p class="foundBillableTime" title="Auto-Owners Insurance  UW&nbsp;Modernization Implementation Lots of meetings (customer and authentication) and UX review and resulting change for underwriting page" onclick="edit(event,231967)">Auto-Owners Insurance - 8 hrs<img class="trash" src="/TaskManagement/Images/trash.gif" onmouseover="changeImage(this,'/TaskManagement/Images/trash_selected.gif')" onmouseout="changeImage(this,'/TaskManagement/Images/trash.gif')" onclick="deleteActivity(231967, 2017, 10, 4, event)"></p>
+                
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 5)">
+                5
+                
+                
+                
+                
+                
+                                        <p class="missingTime">Not Entered</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 6)">
+                6
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 7)">
+                7
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+        <td class="hoursWorked"><p><span id="billableTotal">24.5</span>/<span id="nonBillableTotal">0</span></p></td>
+    </tr>
+    <tr>
+            <td class="calendar" onclick="popup(2017, 10, 8)">
+                8
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 9)">
+                9
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 10)">
+                10
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 11)">
+                11
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 12)">
+                12
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 13)">
+                13
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 14)">
+                14
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+        <td class="hoursWorked"><p><span id="billableTotal">0</span>/<span id="nonBillableTotal">0</span></p></td>
+    </tr>
+    <tr>
+            <td class="calendar" onclick="popup(2017, 10, 15)">
+                15
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 16)">
+                16
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 17)">
+                17
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 18)">
+                18
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 19)">
+                19
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 20)">
+                20
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 21)">
+                21
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+        <td class="hoursWorked"><p><span id="billableTotal">0</span>/<span id="nonBillableTotal">0</span></p></td>
+    </tr>
+    <tr>
+            <td class="calendar" onclick="popup(2017, 10, 22)">
+                22
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 23)">
+                23
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 24)">
+                24
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 25)">
+                25
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 26)">
+                26
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 27)">
+                27
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 28)">
+                28
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+        <td class="hoursWorked"><p><span id="billableTotal">0</span>/<span id="nonBillableTotal">0</span></p></td>
+    </tr>
+    <tr>
+            <td class="calendar" onclick="popup(2017, 10, 29)">
+                29
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 30)">
+                30
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="calendar" onclick="popup(2017, 10, 31)">
+                31
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="old-calendar" onclick="popup(2017, 11, 1)">
+                1
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="old-calendar" onclick="popup(2017, 11, 2)">
+                2
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="old-calendar" onclick="popup(2017, 11, 3)">
+                3
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+            <td class="old-calendar" onclick="popup(2017, 11, 4)">
+                4
+                
+                
+                
+                
+                
+                                        <p>&nbsp;</p>
+
+            </td>
+        <td class="hoursWorked"><p><span id="billableTotal">0</span>/<span id="nonBillableTotal">0</span></p></td>
+    </tr>
+</tbody></table>
+</div>
+</div>
+<!--</body>-->
+<footer>
+<div class="undo" id="undo">
+    Undo
+</div>
+</footer>
+
+
+
+        </section>
+    </div>
+    <footer>
+    </footer>
+    
+<script src="/TaskManagement/bundles/jqueryval?v=v2CxqQOX1_BaSr9Arzk8aYt2tgC1nmN6NVzko2Ra-Kg1"></script>
+
+
+<script type="text/javascript">
+    var deleteList;
+    var undotimeout;
+    $(document).ready(function() {
+        format();
+        deleteList = new Array();
+        undotimeout = new Array();
+    });
+
+    $(document).ajaxComplete(function() {
+        format();
+    });
+    function error() {
+        $("#dialog").dialog("close");
+        $("#dialog").dialog("open");
+    }
+
+    function popup(year, month, day) {
+        // Removed dynamic height/width calculation. It was causing horizontal and vertical scroll bar.
+        // This will fix the modal window size regardless of the size of the window.
+        //widthVal = screen.width * .50;
+        //heightVal = screen.height * .65;
+        //heightVal = heightVal > 500 ? 500 : heightVal;
+        widthVal = 800;
+        heightVal = 585;
+        wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+        wTop = window.screenTop ? window.screenTop : window.screenY;
+        left = wLeft + window.innerWidth / 2 - widthVal / 2;
+        top = wTop + window.innerHeight / 2 - heightVal / 2;
+        $('#dialog').dialog({
+            autoOpen: false,
+            modal: true,
+            open: function(event, ui) {
+                //$(".ui-dialog-titlebar").hide()
+                $("#dialog .loading").show();
+                $(this).load('/TaskManagement/Activities/Create' + '?year=' + year + '&month=' + month + '&day=' + day + '&redirection=true');
+                $('.ui-widget-overlay').bind('click', function() {
+                    $('#dialog').dialog('close');
+                    $('#dialog').empty();
+                    $(this).append('<div class="loading"></div>');
+                })
+                return false;
+            },
+            close: function(event, ui) {
+                $(this).empty();
+                $(this).append('<div class="loading"></div>');
+                if (deleteList.length > 0) {
+                    $("#undo").css("display", "inline");
+                }
+            },
+            width: widthVal,
+            height: heightVal,
+            closeOnEscape: true,
+        });
+        $('#dialog').dialog('open');
+    }
+
+    function edit(e, activityID) {
+        if (!e) var e = window.event;
+        if (e.stopPropogation) {
+            e.stopPropogation();
+        } else {
+            e.cancelBubble = true;
+        }
+        // widthVal = screen.width * .50;
+        // heightVal = screen.height * .60;
+        // heightVal = heightVal > 500 ? 500 : heightVal;
+        widthVal = 800;
+        heightVal = 585;
+        wLeft = window.screenLeft ? window.screenLeft : window.screenX;
+        wTop = window.screenTop ? window.screenTop : window.screenY;
+        left = wLeft + window.innerWidth / 2 - widthVal / 2;
+        top = wTop + window.innerHeight / 2 - heightVal / 2;
+        $('#editdialog').dialog({
+            autoOpen: false,
+            modal: true,
+            open: function (event, ui) {
+                $("#editdialog .loading").show();
+                $(this).load('/TaskManagement/Activities/Edit' + '?ActivityID=' + activityID + '&redirection=true');
+                $('.ui-widget-overlay').bind('click', function() {
+                    $('#editdialog').dialog('close');
+                    $('#editdialog').empty();
+                    $(this).append('<div class="loading"></div>');
+                })
+                return false;
+            },
+            close: function(event, ui) {
+                $(this).empty();
+                $(this).append('<div class="loading"></div>');
+                if (deleteList.length > 0) {
+                    $("#undo").css("display", "inline");
+                }
+            },
+            width: widthVal,
+            height: heightVal,
+            closeOnEscape: true,
+        });
+        $('#editdialog').dialog('open');
+    }
+
+    function deleteActivity(e, activityID, year, month, day) {
+        PermanentDelete(activityID, month);
+        /*if (!e) var e = window.event;
+        if (e.stopPropogation) {
+            e.stopPropogation();
+        }
+        else {
+            e.cancelBubble = true;
+        }
+        var target = e.target || e.srcElement || e.fromElement;
+        target.parentElement.style.display = 'none';
+        var date = new Date(year, month - 1, day);//minus one to adjust for date format difference.
+        //otherwise gives the next month and not htis one.
+        if (countShownChildElements(target.parentElement.parentElement) == 0 && date.getDay() != 0 && date.getDay() != 6 && date < Date()) {
+            var newP = document.createElement('p');
+            newP.className = "missingTime";
+            newP.textContent = "Not Entered";
+            target.parentElement.parentElement.appendChild(newP);
+        }
+        deleteList.push(target.parentElement);
+        $("#undo").html(activityID + " was deleted: UNDO");
+        $("#undo").css("margin-left", "-6em");
+        $("#undo").fadeIn("100", function () { undotimeout.push(setTimeout("PermanentDelete(" + activityID + ")", 5000)); });
+        $("#undo").on("click", null, null, CancelDelete);*/
+    }
+
+    function PermanentDelete(activityID, year, month, day) {
+        window.location = '/TaskManagement/Activities/DeleteActivity' + '?activityID=' + activityID + '&year=' + year + '&month=' + month + '&day=' + day;
+    }
+
+    function deleteActivity(activityID, year, month, day, e) {
+        if (!e) var e = window.event;
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            e.cancelBubble = true;
+        }
+        
+        if (confirm("Are you sure you want to delete this activity?")) {
+            //User hits Okay on confirm message 
+            PermanentDelete(activityID, year, month, day);
+        }
+
+    }
+
+    function countShownChildElements(parent) {
+        var count = 0;
+        for (var i = 0; i < parent.childNodes.length; i++) {
+            var node = parent.childNodes[i];
+            if (node.nodeType == Node.ELEMENT_NODE && node.className == 'foundTime') {
+                if (node.style.cssText != "display: none;") {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    
+
+    function CancelDelete() {
+        window.clearTimeout(undotimeout.pop());
+        $("#undo").fadeOut("100", function() { return true; });
+        var el = deleteList.pop();
+        el.style.display = el.parentElement.style.display;
+        for (var i = 0; i < el.parentElement.childNodes.length; i++) {
+            var node = el.parentElement.childNodes[i];
+            if (node.className == 'missingTime') {
+                el.parentElement.removeChild(node);
+            }
+        }
+    }
+
+    function format() {
+        $("div.dialog").css("background", "#efeeef");
+        $("div.dialog").css("font-size", ".85em");
+    }
+
+    function changeImage(imgsrc, image) {
+        imgsrc.src = image;
+    }
+
+</script>
+
+
+
+</body>

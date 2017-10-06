@@ -13,6 +13,7 @@ const moment = require('moment');
 // as well as import your extension to test it
 const taskTrackingService = require('../taskTrackingParsingService');
 const getTasksMonthView = fs.readFileSync('./test/mock-requests/get-tasks-month-view.html').toString();
+const getTasksMonthOctoberView = fs.readFileSync('./test/mock-requests/get-tasks-month-view-oct.html').toString();
 const getTaskDetails = fs.readFileSync('./test/mock-requests/get-task-details.html').toString();
 
 // Defines a Mocha test suite to group tests of similar kind together
@@ -31,6 +32,11 @@ describe("Task Tracking Parsing HTML Service", function() {
 
     it("parseOutTasksOfTheWeek to work for mock html", function() {
         const tasks = taskTrackingService.parseOutTasksOfTheWeek(getTasksMonthView, moment('08-02-2017', 'MM-DD-YYYY'));
+        expect(tasks).toMatchSnapshot();
+    });
+
+    test.only("parseOutTasksOfTheWeek to work for october example html", function() {
+        const tasks = taskTrackingService.parseOutTasksOfTheWeek(getTasksMonthOctoberView, moment('10-05-2017', 'MM-DD-YYYY'));
         expect(tasks).toMatchSnapshot();
     });
 

@@ -72,7 +72,7 @@ const getDailyTasks = (username, password, date) => {
             headers: {
                 "Content-Type": 'application/x-www-form-urlencoded',
             },
-            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
+            body: `submitbutton=++%C2%AB++&dateString=${Number(dateOrDefault.format('M')) + 1}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response) {
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
@@ -134,7 +134,7 @@ const getWeeklyTasks = (username, password, date) => {
             headers: {
                 "Content-Type": 'application/x-www-form-urlencoded',
             },
-            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
+            body: `submitbutton=++%C2%AB++&dateString=${Number(dateOrDefault.format('M')) + 1}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response){
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
@@ -168,7 +168,7 @@ const getMonthlyTasks = (username, password, date) => {
             headers: {
                 "Content-Type": 'application/x-www-form-urlencoded',
             },
-            body: `submitbutton=++%C2%AB++&dateString=${dateOrDefault.format('M')}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
+            body: `submitbutton=++%C2%AB++&dateString=${Number(dateOrDefault.format('M')) + 1}%2F17%2F${dateOrDefault.year()}+5%3A04%3A40+PM&X-Requested-With=XMLHttpRequest`
         }, function (error, response){
             console.log(`${url} returned statusCode: ${response.statusCode}`);
             
