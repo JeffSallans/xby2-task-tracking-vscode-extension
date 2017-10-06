@@ -35,7 +35,7 @@ describe("Task Tracking Parsing HTML Service", function() {
         expect(tasks).toMatchSnapshot();
     });
 
-    test.only("parseOutTasksOfTheWeek to work for october example html", function() {
+    it("parseOutTasksOfTheWeek to work for october example html", function() {
         const tasks = taskTrackingService.parseOutTasksOfTheWeek(getTasksMonthOctoberView, moment('10-05-2017', 'MM-DD-YYYY'));
         expect(tasks).toMatchSnapshot();
     });
