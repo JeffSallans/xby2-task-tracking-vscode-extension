@@ -44,7 +44,8 @@
     "cheerio": "^1.0.0-rc.2",
     "jest": "^20.0.4",
     "lodash": "^4.17.4",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "node-task-tracking": "^1.0.0"
   },
   "jest": {
     "testMatch": ["**/?(*.)spec.js?(x)"]
