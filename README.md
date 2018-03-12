@@ -1,6 +1,6 @@
-# xby2-task-tracking README
+# X by 2 Task Tracking
 
-This is the README for your extension "xby2-task-tracking". After writing up a brief description, we recommend including the following sections.
+Use this to enter task tracking data faster
 
 ## Features
 
@@ -29,23 +29,13 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+None at the moment
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 2.0.0
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release of task tracking plugin
 
 -----------------------------------------------------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 const vscode = require('vscode');
 const _ = require('lodash');
 const moment = require('moment');
-const taskTrackingService = require('node-task-tracking');
+const taskTrackingService = require('@jsallans/node-task-tracking');
 const LoginAndHoursBar = require('./LoginAndHoursBar');
 const defaultTask = require('./defaultTask');
 /**
