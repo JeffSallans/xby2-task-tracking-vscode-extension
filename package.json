@@ -17,11 +17,11 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.login",
+        "command": "xby2-task-tracking.login",
         "title": "X by 2 - login"
       },
       {
-        "command": "extension.submitTask",
+        "command": "xby2-task-tracking.submitTask",
         "title": "X by 2 - submit task"
       }
     ]
