@@ -13,7 +13,7 @@ class LoginAndHoursBar {
         this._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         this._statusBarItem.tooltip = 'X by 2 Task Tracking Extension';
         this._statusBarItem.text = `${this._statusBarTitle}: Click To Log In`;
-        this._statusBarItem.command = 'extension.login';
+        this._statusBarItem.command = 'login';
         this._statusBarItem.show();
     }
 
@@ -33,7 +33,7 @@ class LoginAndHoursBar {
         
         if (!userData.isValid) {
             this._statusBarItem.text = `${this._statusBarTitle}: Invalid Login, Click To Try Again`;
-            this._statusBarItem.command = 'extension.login';
+            this._statusBarItem.command = 'login';
             this._statusBarItem.show();            
             return;
         }
@@ -49,7 +49,7 @@ class LoginAndHoursBar {
         }, 0);
 
         this._statusBarItem.text = `${this._statusBarTitle}: ${loginMessage} ${billableHours}/${nonBillableHours}h`;
-        this._statusBarItem.command = 'extension.submitTask';
+        this._statusBarItem.command = 'submitTask';
         this._statusBarItem.show();        
     }
 

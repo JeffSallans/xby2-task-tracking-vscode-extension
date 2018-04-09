@@ -240,12 +240,12 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var loginDisposable = vscode.commands.registerCommand('xby2-task-tracking.login', loginWorkflow);
+    var loginDisposable = vscode.commands.registerCommand('login', loginWorkflow);
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var submitTaskDisposable = vscode.commands.registerCommand('xby2-task-tracking.submitTask', submitTaskWorkflow);
+    var submitTaskDisposable = vscode.commands.registerCommand('submitTask', submitTaskWorkflow);
 
 
     context.subscriptions.push(loginDisposable);
