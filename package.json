@@ -2,7 +2,7 @@
   "name": "xby2-task-tracking",
   "displayName": "X by 2 Task Tracking",
   "description": "Easy way to add tasks to X by 2 task tracking website",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "publisher": "jsallans",
   "engines": {
     "vscode": "^1.14.0"
